@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "522772451772",
+    "firebase_url": "https://theinterview-5523c.firebaseio.com",
+    "project_id": "theinterview-5523c",
+    "storage_bucket": "theinterview-5523c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522772451772:android:2cf27b17a225cc33",
+        "android_client_info": {
+          "package_name": "com.epicodus.theinterview"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "522772451772-ebof8rf4dud4mc7d21sjs5hi31u4n00o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLjzjAnqafLYYpoOqX6CCw919BOd1DCzc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "522772451772-ebof8rf4dud4mc7d21sjs5hi31u4n00o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
