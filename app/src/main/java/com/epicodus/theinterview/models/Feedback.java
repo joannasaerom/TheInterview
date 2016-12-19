@@ -7,37 +7,24 @@ import org.parceler.Parcel;
  */
 
 @Parcel
-public class Message {
+public class Feedback {
     String textBody;
-    long timestamp;
     String pushId;
     String userId;
-    String chatId;
 
-    public Message(){}
+    public Feedback(){}
 
-    public Message(String textBody, long timestamp, String userId, String chatId){
+    public Feedback(String textBody, String userId){
         this.textBody = textBody;
-        this.timestamp = timestamp;
         this.userId = userId;
-        this.chatId = chatId;
     }
 
     public String getTextBody() {
         return textBody;
-
-    }
-
-    public long getTimestamp() {
-        return timestamp;
     }
 
     public String getUserId() {
         return userId;
-    }
-
-    public String getChatId() {
-        return chatId;
     }
 
     public String getPushId() {
