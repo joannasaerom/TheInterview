@@ -114,6 +114,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Chat chat = new Chat(hiringManager, interviewee);
                     Log.d("MainActivity!!", chat.getHiringManager());
 
+                    //get database reference to save chat for hiring manager user
+                    DatabaseReference hmRef = FirebaseDatabase
+                            .getInstance()
+                            .getReference(Constants.FIREBASE_CHAT_REFERENCE)
+                            .child(hiringManager);
+
+                    //save chat for hiring manager user
+                    DatabaseReference pushRef = hmRef.push();
+                    String pushId = pushRef.getKey();
+                    chat.setPushId(pushId);
+                    pushRef.setValue(chat);
+
+                    //get database reference to save chat for interviewee user
+                    DatabaseReference iRef = FirebaseDatabase
+                            .getInstance()
+                            .getReference(Constants.FIREBASE_CHAT_REFERENCE)
+                            .child(interviewee);
+
+                    DatabaseReference tempRef = iRef.push();
+                    String tempId = tempRef.getKey();
+                    chat.setPushId(tempId);
+                    tempRef.setValue(chat);
+
                     Intent intent = new Intent(MainActivity.this, ChatActivity.class);
                     intent.putExtra("chat", Parcels.wrap(chat));
                     mAuthProgressDialog.dismiss();
