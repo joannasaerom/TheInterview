@@ -5,4 +5,8 @@ package com.epicodus.theinterview;
  */
 
 public class Constants {
+    public static final String FIREBASE_USER_REFERENCE = "users";
+    public static final String FIREBASE_CHAT_REFERENCE = "chats";
+    public static final String FIREBASE_MESSAGE_REFERENCE = "messages";
+    public static final String FIREBASE_FEEDBACK_REFERENCE = "feedbacks";
 }

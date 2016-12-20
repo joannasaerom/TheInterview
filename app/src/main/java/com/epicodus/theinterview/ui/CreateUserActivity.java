@@ -19,6 +19,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -115,6 +117,8 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
             }
 
         });
+
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
     }
 
     private void createFirebaseUserProfile(final FirebaseUser user) {
