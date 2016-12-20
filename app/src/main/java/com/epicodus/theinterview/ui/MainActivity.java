@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.epicodus.theinterview.Constants;
 import com.epicodus.theinterview.R;
+import com.epicodus.theinterview.models.Chat;
 import com.epicodus.theinterview.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,6 +23,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -68,11 +71,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if (v == mStartButton){
             final ArrayList<String> userIds = new ArrayList<>();
+            final ArrayList<String> chatUserList = new ArrayList<>();
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             String uid = user.getUid();
+            chatUserList.add(uid);
 
-            DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REFERENCE);
+            DatabaseReference mUserRef = FirebaseDatabase
+                    .getInstance()
+                    .getReference(Constants.FIREBASE_USER_REFERENCE);
+
+            //get array of users in firebase
             mUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -80,10 +89,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         userIds.add(snapshot.getValue(User.class).getuId());
                     }
 
-                    Random randomNum = new Random();
-                    String randomUserId = userIds.get(randomNum.nextInt(userIds.size()));
+                    //generate random user from user array
+                    String mRandomUser = generateRandomUser(userIds);
+                    chatUserList.add(mRandomUser);
 
-                    Log.d("MainActivity", randomUserId);
+                    //randomly generate hiring manager from array list
+                    String hiringManager = generateRandomUser(chatUserList);
+                    int hiringManagerPosition = chatUserList.indexOf(hiringManager);
+
+                    String interviewee;
+                    if (hiringManagerPosition == 0) {
+                        interviewee = chatUserList.get(1);
+                    } else {
+                        interviewee = chatUserList.get(0);
+                    }
+
+                    Chat chat = new Chat(hiringManager, interviewee);
+
+                    Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                    intent.putExtra("chat", Parcels.wrap(chat));
+                    startActivity(intent);
                 }
 
                 @Override
@@ -91,11 +116,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 }
             });
-
-
-
-//            Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-//            startActivity(intent);
         }
 
     }
@@ -107,4 +127,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
         finish();
     }
+
+    private String generateRandomUser(ArrayList<String> userIds) {
+        Random randomNum = new Random();
+        String randomUserId = userIds.get(randomNum.nextInt(userIds.size()));
+        return randomUserId;
+    }
+
+//    private String checkRandomUsersChatList(ArrayList<String> userIds){
+//        final ArrayList<Chat> mChats = new ArrayList<>();
+//
+//        final String randomUser = generateRandomUser(userIds);
+//
+//        //get database reference for random user's chat list
+//        DatabaseReference mChatRef = FirebaseDatabase
+//                .getInstance()
+//                .getReference(Constants.FIREBASE_CHAT_REFERENCE)
+//                .child(randomUser);
+//
+//        //get array of random user's chats
+//        mChatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+//                    mChats.add(snapshot.getValue(Chat.class));
+//                }
+//
+//                //check if user has active chat
+//                for (int i = 0; i < mChats.size(); i++){
+//                    if (mChats.get(i).isActive()){
+//
+//                       break;
+//                    }
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//        return randomUser;
+//    }
 }

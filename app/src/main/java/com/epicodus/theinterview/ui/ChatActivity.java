@@ -2,6 +2,7 @@ package com.epicodus.theinterview.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -9,6 +10,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.epicodus.theinterview.R;
+import com.epicodus.theinterview.models.Chat;
+
+import org.parceler.Parcels;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -20,11 +24,15 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.sendButton) Button mSendButton;
     @Bind(R.id.finishButton) Button mFinishButton;
 
+    private Chat mChat;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
+
+        mChat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
 
         mMicImage.setOnClickListener(this);
         mSendButton.setOnClickListener(this);
