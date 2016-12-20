@@ -18,6 +18,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.activityTitle) TextView mActivityTitle;
     @Bind(R.id.micImage) ImageView mMicImage;
     @Bind(R.id.sendButton) Button mSendButton;
+    @Bind(R.id.finishButton) Button mFinishButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         mMicImage.setOnClickListener(this);
         mSendButton.setOnClickListener(this);
+        mFinishButton.setOnClickListener(this);
+
+        //if chat active is false then change color of imagebackground?  when they try to click on mic give toast saying the interview has finished. same for button?
     }
 
     @Override
@@ -35,6 +39,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         }
         if (v == mSendButton){
+
+        }
+        if (v == mFinishButton){
+            //set chat activity to false. if hiring manager get feedback prompt and save feedback. for both users return to main activity.
 
         }
 

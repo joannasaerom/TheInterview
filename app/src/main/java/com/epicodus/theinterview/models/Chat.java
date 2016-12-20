@@ -10,6 +10,7 @@ import org.parceler.Parcel;
 public class Chat {
     String hiringManager;
     String interviewee;
+    boolean active;
     String pushId;
 
     public Chat(){}
@@ -17,6 +18,7 @@ public class Chat {
     public Chat(String hiringManager, String interviewee){
         this.hiringManager = hiringManager;
         this.interviewee = interviewee;
+        this.active = true;
 
     }
 
@@ -34,6 +36,14 @@ public class Chat {
 
     public void setPushId(String pushId) {
         this.pushId = pushId;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
 
