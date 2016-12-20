@@ -7,7 +7,7 @@
     tools:context="com.epicodus.theinterview.ui.MainActivity">
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="50dp"
         android:text="Interview/Chat Log"
         android:textColor="@color/colorTextIcons"
@@ -16,10 +16,24 @@
         android:id="@+id/activityTitle"
         android:gravity="center"
         />
+
+    <Button
+        android:text="Start"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorTextIcons"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_toRightOf="@+id/activityTitle"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/startButton" />
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/activityTitle"
         android:id="@+id/chatList">
     </ListView>
+
+
 </RelativeLayout>

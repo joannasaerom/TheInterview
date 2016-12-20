@@ -16,11 +16,35 @@
         android:id="@+id/activityTitle"
         android:gravity="center"
         />
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/activityTitle"
-        android:id="@+id/messageList">
+        android:id="@+id/messageList"
+        android:layout_below="@+id/activityTitle">
     </ListView>
+
+    <ImageView
+        android:layout_width="300dp"
+        android:background="@color/colorPrimaryDark"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:id="@+id/micImage"
+        android:src="@drawable/ic_mic_white_24dp"
+        android:layout_alignParentBottom="true"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="Send"
+        android:textColor="@color/colorTextIcons"
+        android:id="@+id/sendButton"
+        android:layout_toRightOf="@+id/micImage"
+        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@+id/micImage" />
+
+
 
 </RelativeLayout>
