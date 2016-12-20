@@ -9,6 +9,7 @@ import org.parceler.Parcel;
 @Parcel
 public class User {
     String uId;
+    String pushId;
 
     public User(){}
 
@@ -22,5 +23,13 @@ public class User {
 
     public void setuId(String uId) {
         this.uId = uId;
+    }
+
+    public String getPushId() {
+        return pushId;
+    }
+
+    public void setPushId(String pushId) {
+        this.pushId = pushId;
     }
 }

@@ -12,7 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.epicodus.theinterview.Constants;
 import com.epicodus.theinterview.R;
+import com.epicodus.theinterview.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -109,6 +111,16 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
                 if (task.isSuccessful()) {
                     Log.d(TAG, "Authentication successful");
                     createFirebaseUserProfile(task.getResult().getUser());
+
+                    String uid = task.getResult().getUser().getUid();
+                    User newUser = new User(uid);
+
+                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_USER_REFERENCE);
+
+                    DatabaseReference pushRef = userRef.push();
+                    String pushId = pushRef.getKey();
+                    newUser.setPushId(pushId);
+                    pushRef.setValue(newUser);
                 } else {
                     Toast.makeText(CreateUserActivity.this, "Authentication failed.",
                             Toast.LENGTH_SHORT).show();
@@ -118,7 +130,6 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
 
         });
 
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference()
     }
 
     private void createFirebaseUserProfile(final FirebaseUser user) {
