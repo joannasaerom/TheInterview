@@ -7,7 +7,7 @@
     tools:context="com.epicodus.theinterview.ui.ChatActivity">
 
     <TextView
-        android:layout_width="375dp"
+        android:layout_width="350dp"
         android:layout_height="50dp"
         android:text="Interview"
         android:textColor="@color/colorTextIcons"

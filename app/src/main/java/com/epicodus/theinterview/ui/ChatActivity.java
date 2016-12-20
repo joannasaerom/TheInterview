@@ -33,6 +33,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         ButterKnife.bind(this);
 
         mChat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
+        Log.d("Chatactivity!!!", mChat.getHiringManager());
 
         mMicImage.setOnClickListener(this);
         mSendButton.setOnClickListener(this);

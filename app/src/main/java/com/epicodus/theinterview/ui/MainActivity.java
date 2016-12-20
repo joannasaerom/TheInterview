@@ -1,5 +1,6 @@
 package com.epicodus.theinterview.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,11 +38,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.activityTitle) TextView mActivityTitle;
     @Bind(R.id.startButton) Button mStartButton;
 
+    private ProgressDialog mAuthProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        createAuthProgressDialog();
 
         mStartButton.setOnClickListener(this);
     }
@@ -72,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v == mStartButton){
             final ArrayList<String> userIds = new ArrayList<>();
             final ArrayList<String> chatUserList = new ArrayList<>();
+
+            mAuthProgressDialog.show();
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             String uid = user.getUid();
@@ -105,9 +112,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                     Chat chat = new Chat(hiringManager, interviewee);
+                    Log.d("MainActivity!!", chat.getHiringManager());
 
                     Intent intent = new Intent(MainActivity.this, ChatActivity.class);
                     intent.putExtra("chat", Parcels.wrap(chat));
+                    mAuthProgressDialog.dismiss();
                     startActivity(intent);
                 }
 
@@ -132,6 +141,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Random randomNum = new Random();
         String randomUserId = userIds.get(randomNum.nextInt(userIds.size()));
         return randomUserId;
+    }
+
+    private void createAuthProgressDialog() {
+        mAuthProgressDialog = new ProgressDialog(this);
+        mAuthProgressDialog.setTitle("Loading");
+        mAuthProgressDialog.setMessage("Setting up the interview");
+        mAuthProgressDialog.setCancelable(false);
     }
 
 //    private String checkRandomUsersChatList(ArrayList<String> userIds){
