@@ -14,9 +14,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.epicodus.theinterview.Constants;
 import com.epicodus.theinterview.R;
 import com.epicodus.theinterview.models.Chat;
+import com.epicodus.theinterview.models.Message;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -25,6 +31,7 @@ import org.parceler.Parcels;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.UUID;
 
 import butterknife.Bind;
@@ -52,11 +59,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         ButterKnife.bind(this);
 
         mChat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
-
-        randomFileName = UUID.randomUUID().toString() + ".3gp";
-
-        mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-        mFileName += "/" + randomFileName;
 
         mStorage = FirebaseStorage.getInstance().getReference();
 
@@ -102,6 +104,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void startRecording() {
+        randomFileName = UUID.randomUUID().toString() + ".3gp";
+
+        mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
+        mFileName += "/" + randomFileName;
+
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -139,6 +146,25 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 mDialog.dismiss();
             }
         });
+
+        String filePathString = filepath.toString();
+        long today = new Date().getTime();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();
+        String chatId = mChat.getPushId();
+
+        Message message = new Message(filePathString, today, uid, chatId);
+
+        DatabaseReference msgRef = FirebaseDatabase
+                .getInstance()
+                .getReference(Constants.FIREBASE_MESSAGE_REFERENCE)
+                .child(chatId);
+
+        DatabaseReference pushRef = msgRef.push();
+        String pushId = pushRef.getKey();
+        message.setPushId(pushId);
+        pushRef.setValue(message);
 
     }
 }
