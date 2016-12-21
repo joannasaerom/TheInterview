@@ -28,13 +28,13 @@
         android:layout_alignParentTop="true"
         android:layout_alignBottom="@+id/activityTitle" />
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/messageList"
         android:layout_below="@+id/activityTitle"
         android:layout_above="@+id/micImage">
-    </ListView>
+    </android.support.v7.widget.RecyclerView>
 
 
         <ImageView

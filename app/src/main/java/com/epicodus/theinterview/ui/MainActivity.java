@@ -4,13 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.epicodus.theinterview.Constants;
@@ -34,7 +33,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    @Bind(R.id.chatList) ListView mChatList;
+    @Bind(R.id.chatList) RecyclerView mChatList;
     @Bind(R.id.activityTitle) TextView mActivityTitle;
     @Bind(R.id.startButton) Button mStartButton;
 
@@ -137,8 +136,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             .child(interviewee);
 
                     DatabaseReference tempRef = iRef.push();
-                    String tempId = tempRef.getKey();
-                    chat.setPushId(tempId);
                     tempRef.setValue(chat);
 
                     Intent intent = new Intent(MainActivity.this, ChatActivity.class);
