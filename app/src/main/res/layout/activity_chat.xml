@@ -32,18 +32,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/messageList"
-        android:layout_below="@+id/activityTitle">
+        android:layout_below="@+id/activityTitle"
+        android:layout_above="@+id/micImage">
     </ListView>
 
-    <ImageView
-        android:layout_width="300dp"
-        android:background="@color/colorPrimaryDark"
-        android:layout_height="wrap_content"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:id="@+id/micImage"
-        android:src="@drawable/ic_mic_white_24dp"
-        android:layout_alignParentBottom="true"/>
+
+        <ImageView
+            android:layout_height="wrap_content"
+            android:layout_width="300dp"
+            android:paddingTop="5dp"
+            android:background="@color/colorPrimaryDark"
+            android:layout_above="@+id/recordText"
+            android:id="@+id/micImage"
+            android:src="@drawable/ic_mic_white_24dp"
+          />
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Press mic to record"
+            android:textAlignment="center"
+            android:paddingBottom="5dp"
+            android:background="@color/colorPrimaryDark"
+            android:id="@+id/recordText"
+            android:textColor="@color/colorTextIcons"/>
+
 
     <Button
         android:layout_width="match_parent"

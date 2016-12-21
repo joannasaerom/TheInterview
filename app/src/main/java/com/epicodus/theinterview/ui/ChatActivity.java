@@ -25,6 +25,7 @@ import org.parceler.Parcels;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,12 +36,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.micImage) ImageView mMicImage;
     @Bind(R.id.sendButton) Button mSendButton;
     @Bind(R.id.finishButton) Button mFinishButton;
+    @Bind(R.id.recordText) TextView mRecordText;
 
     private Chat mChat;
     private MediaRecorder mRecorder;
     private String mFileName;
     private StorageReference mStorage;
     private ProgressDialog mDialog;
+    private String randomFileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +53,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         mChat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
 
+        randomFileName = UUID.randomUUID().toString() + ".3gp";
+
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-        mFileName += "/recorded_audio.3gp";
+        mFileName += "/" + randomFileName;
 
         mStorage = FirebaseStorage.getInstance().getReference();
 
@@ -61,11 +66,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
 
                     startRecording();
+                    mRecordText.setText("Recording");
                     Log.d("Chatstart", "recording");
 
                 } else if (motionEvent.getAction() == MotionEvent.ACTION_UP){
 
                     stopRecording();
+                    mRecordText.setText("Press mic to start over");
                     Log.d("Chatend", "end recording");
 
                 }
@@ -85,7 +92,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v == mSendButton){
-
+            uploadAudio();
         }
         if (v == mFinishButton){
             //set chat activity to false. if hiring manager get feedback prompt and save feedback. for both users return to main activity.
@@ -96,11 +103,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startRecording() {
         mRecorder = new MediaRecorder();
-//
-//        if (mRecorder != null){
-//            mRecorder.release();
-//        }
-
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
@@ -115,23 +117,21 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         } catch (IllegalStateException e){
             e.printStackTrace();
         }
-
-
     }
 
     private void stopRecording() {
         mRecorder.stop();
+        mRecorder.reset();
         mRecorder.release();
         mRecorder = null;
-
-        uploadAudio();
     }
 
     private void uploadAudio(){
+        mRecordText.setText("Press mic to record");
         mDialog.setMessage("Sending");
         mDialog.show();
 
-        StorageReference filepath = mStorage.child("Audio").child("new_audio.3gp");
+        StorageReference filepath = mStorage.child("Audio").child(randomFileName);
         Uri uri = Uri.fromFile(new File(mFileName));
         filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override

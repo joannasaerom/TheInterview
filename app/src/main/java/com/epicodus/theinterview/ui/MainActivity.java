@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void createAuthProgressDialog() {
         mAuthProgressDialog = new ProgressDialog(this);
         mAuthProgressDialog.setTitle("Loading");
-        mAuthProgressDialog.setMessage("Setting up the interview");
+        mAuthProgressDialog.setMessage("Setting up interview");
         mAuthProgressDialog.setCancelable(false);
     }
 
