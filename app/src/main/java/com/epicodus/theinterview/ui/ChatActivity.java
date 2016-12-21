@@ -149,7 +149,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mDialog.setMessage("Sending");
         mDialog.show();
 
-        StorageReference filepath = mStorage.child("Audio").child(randomFileName);
+        StorageReference filepath = mStorage.child(Constants.FIREBASE_AUDIO_REFERENCE).child(randomFileName);
         Uri uri = Uri.fromFile(new File(mFileName));
         filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -158,14 +158,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        String filePathString = filepath.toString();
         long today = new Date().getTime();
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = user.getUid();
         String chatId = mChat.getPushId();
 
-        Message message = new Message(filePathString, today, uid, chatId);
+        Message message = new Message(randomFileName, today, uid, chatId);
 
         DatabaseReference msgRef = FirebaseDatabase
                 .getInstance()
