@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mAuthProgressDialog.show();
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            String uid = user.getUid();
+            final String uid = user.getUid();
             chatUserList.add(uid);
 
             DatabaseReference mUserRef = FirebaseDatabase
@@ -93,11 +93,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        userIds.add(snapshot.getValue(User.class).getuId());
+                        String userId = snapshot.getValue(User.class).getuId();
+                        if (!userId.equals(uid)){
+                            userIds.add(snapshot.getValue(User.class).getuId());
+                        }
+
                     }
 
                     //generate random user from user array
                     String mRandomUser = generateRandomUser(userIds);
+
                     chatUserList.add(mRandomUser);
 
                     //randomly generate hiring manager from array list
@@ -112,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                     Chat chat = new Chat(hiringManager, interviewee);
-                    Log.d("MainActivity!!", chat.getHiringManager());
 
                     //get database reference to save chat for hiring manager user
                     DatabaseReference hmRef = FirebaseDatabase
