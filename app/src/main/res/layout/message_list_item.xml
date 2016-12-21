@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
         android:id="@+id/playbackImage"
-        android:src="@drawable/ic_mic_white_24dp"/>
+        android:src="@drawable/ic_play_arrow_white_24dp"/>
 
     <TextView
         android:layout_width="wrap_content"

@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -16,8 +17,10 @@ import android.widget.TextView;
 
 import com.epicodus.theinterview.Constants;
 import com.epicodus.theinterview.R;
+import com.epicodus.theinterview.adapters.FirebaseMessageViewHolder;
 import com.epicodus.theinterview.models.Chat;
 import com.epicodus.theinterview.models.Message;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -51,6 +54,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private StorageReference mStorage;
     private ProgressDialog mDialog;
     private String randomFileName;
+    private DatabaseReference mMessageReference;
+    private FirebaseRecyclerAdapter mFirebaseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +86,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 return false;
             }
         });
+
+        mMessageReference = FirebaseDatabase
+                .getInstance()
+                .getReference(Constants.FIREBASE_MESSAGE_REFERENCE)
+                .child(mChat.getPushId());
+        setUpFirebaseAdapter();
 
         mDialog = new ProgressDialog(this);
 
@@ -166,5 +177,18 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         message.setPushId(pushId);
         pushRef.setValue(message);
 
+    }
+
+    private void setUpFirebaseAdapter(){
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, FirebaseMessageViewHolder>(Message.class, R.layout.message_list_item, FirebaseMessageViewHolder.class, mMessageReference) {
+            @Override
+            protected void populateViewHolder(FirebaseMessageViewHolder viewHolder, Message model, int position) {
+                viewHolder.bindMessage(model);
+            }
+        };
+
+        mMessageList.setHasFixedSize(true);
+        mMessageList.setLayoutManager(new LinearLayoutManager(this));
+        mMessageList.setAdapter(mFirebaseAdapter);
     }
 }
