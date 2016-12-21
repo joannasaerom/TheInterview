@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,8 +15,10 @@ import android.widget.TextView;
 
 import com.epicodus.theinterview.Constants;
 import com.epicodus.theinterview.R;
+import com.epicodus.theinterview.adapters.FirebaseChatViewHolder;
 import com.epicodus.theinterview.models.Chat;
 import com.epicodus.theinterview.models.User;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.activityTitle) TextView mActivityTitle;
     @Bind(R.id.startButton) Button mStartButton;
 
+    private DatabaseReference mChatReference;
+    private FirebaseRecyclerAdapter mFirebaseAdapter;
     private ProgressDialog mAuthProgressDialog;
 
     @Override
@@ -46,6 +51,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ButterKnife.bind(this);
 
         createAuthProgressDialog();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();
+
+        mChatReference = FirebaseDatabase
+                .getInstance()
+                .getReference(Constants.FIREBASE_CHAT_REFERENCE)
+                .child(uid);
+
+//        mChatReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+        setUpFirebaseAdapter();
 
         mStartButton.setOnClickListener(this);
     }
@@ -69,6 +95,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mFirebaseAdapter.cleanup();
     }
 
     @Override
@@ -172,6 +204,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAuthProgressDialog.setTitle("Loading");
         mAuthProgressDialog.setMessage("Setting up interview");
         mAuthProgressDialog.setCancelable(false);
+    }
+
+    private void setUpFirebaseAdapter(){
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Chat, FirebaseChatViewHolder>(Chat.class, R.layout.chat_list_item, FirebaseChatViewHolder.class, mChatReference) {
+            @Override
+            protected void populateViewHolder(FirebaseChatViewHolder viewHolder, Chat model, int position) {
+                viewHolder.bindChat(model);
+            }
+        };
+
+        mChatList.setHasFixedSize(true);
+        mChatList.setLayoutManager(new LinearLayoutManager(this));
+        mChatList.setAdapter(mFirebaseAdapter);
     }
 
 //    private String checkRandomUsersChatList(ArrayList<String> userIds){
