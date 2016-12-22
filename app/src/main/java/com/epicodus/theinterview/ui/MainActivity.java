@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             .getReference(Constants.FIREBASE_CHAT_REFERENCE)
                             .child(hiringManager);
 
-                    //save chat for hiring manager user
+                    //get key for database reference
                     DatabaseReference pushRef = hmRef.push();
                     String pushId = pushRef.getKey();
                     chat.setHiringManagerChatId(pushId);
@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             .getReference(Constants.FIREBASE_CHAT_REFERENCE)
                             .child(interviewee);
 
+                    //get key for database reference
                     DatabaseReference tempRef = iRef.push();
                     String tempId = tempRef.getKey();
                     chat.setIntervieweeChatId(tempId);

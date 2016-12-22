@@ -140,6 +140,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     //generate
                 }
             }
+            mChat.setActive(false);
             //set chat activity to false. if hiring manager get feedback prompt and save feedback. for both users return to main activity.
             DatabaseReference updateChatRef = FirebaseDatabase
                     .getInstance()
@@ -147,11 +148,15 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     .child(mChat.getHiringManager())
                     .child(mChat.getHiringManagerChatId());
 
+            updateChatRef.setValue(mChat);
+
             DatabaseReference updateSecChatRef = FirebaseDatabase
                     .getInstance()
                     .getReference(Constants.FIREBASE_CHAT_REFERENCE)
                     .child(mChat.getInterviewee())
                     .child(mChat.getIntervieweeChatId());
+
+            updateSecChatRef.setValue(mChat);
 
             //send users back to main activity
             Intent intent = new Intent(ChatActivity.this, MainActivity.class);
@@ -221,7 +226,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         String chatId = mChat.getHiringManagerChatId();
 
         Message message = new Message(randomFileName, today, uid, chatId);
-
 
         //save message
         DatabaseReference pushRef = mMessageReference.push();
