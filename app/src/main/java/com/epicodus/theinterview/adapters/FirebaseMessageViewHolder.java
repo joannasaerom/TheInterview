@@ -84,6 +84,7 @@ public class FirebaseMessageViewHolder extends RecyclerView.ViewHolder implement
             layoutLp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
             textLp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             mLayout.setBackgroundResource(R.drawable.backgroundyou);
+            mPlaybackImage.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimaryLight));
 
         }
 
