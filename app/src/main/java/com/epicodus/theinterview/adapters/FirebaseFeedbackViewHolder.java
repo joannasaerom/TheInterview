@@ -8,6 +8,9 @@ import android.widget.TextView;
 import com.epicodus.theinterview.R;
 import com.epicodus.theinterview.models.Feedback;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 /**
  * Created by joannaanderson on 12/21/16.
@@ -27,8 +30,12 @@ public class FirebaseFeedbackViewHolder extends RecyclerView.ViewHolder {
         TextView mFeedback = (TextView) mView.findViewById(R.id.feedback);
         TextView mTimestamp = (TextView) mView.findViewById(R.id.timestamp);
 
+        Date date = new Date(feedback.getTimestamp());
+        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        String formattedDate = df.format(date);
+
         mFeedback.setText(feedback.getTextBody());
-        mTimestamp.setText("Date: " + feedback.getTimestamp());
+        mTimestamp.setText("Feedback given on: " + formattedDate);
 
     }
 }

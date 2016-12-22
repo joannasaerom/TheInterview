@@ -1,6 +1,7 @@
 package com.epicodus.theinterview.ui;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,6 +39,9 @@ public class FeedbackActivity extends AppCompatActivity {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = user.getUid();
+
+        Typeface gravitas = Typeface.createFromAsset(getAssets(), "fonts/gravitas-one.regular.ttf");
+        mActivityTitle.setTypeface(gravitas);
 
         mFeedbackReference = FirebaseDatabase
                 .getInstance()

@@ -2,6 +2,7 @@ package com.epicodus.theinterview.ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
@@ -25,8 +26,11 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -74,9 +78,16 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
 
+        Typeface gravitas = Typeface.createFromAsset(getAssets(), "fonts/gravitas-one.regular.ttf");
+        mActivityTitle.setTypeface(gravitas);
+        mSendButton.setTypeface(gravitas);
+        mFinishButton.setTypeface(gravitas);
+
         //if chat active is false then change color of mic/sendbuttong?  when they try to click on mic give toast saying the interview has finished. same for button?
 
+        //create local variables
         questionCounter = 0;
+        final ArrayList<Message> mMessages = new ArrayList<>();
 
         mChat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
 
@@ -85,6 +96,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         if (mChat.getHiringManager().equals(uid)){
             mFinishButton.setText("Next Q");
+            mActivityTitle.setTextSize(15.0f);
+            mActivityTitle.setTypeface(Typeface.SANS_SERIF);
             interviewQuestions = generateQuestions(questions);
             mActivityTitle.setText(interviewQuestions[questionCounter]);
             questionCounter += 1;
@@ -115,6 +128,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 .getInstance()
                 .getReference(Constants.FIREBASE_MESSAGE_REFERENCE)
                 .child(mChat.getHiringManagerChatId());
+
         setUpFirebaseAdapter();
 
         mDialog = new ProgressDialog(this);

@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -22,6 +23,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -70,12 +73,30 @@ public class FirebaseMessageViewHolder extends RecyclerView.ViewHolder implement
 
     public void bindMessage(Message message){
         TextView mTimestamp = (TextView) mView.findViewById(R.id.timestamp);
+        RelativeLayout mLayout = (RelativeLayout) mView.findViewById(R.id.container);
+
         mMessage = message;
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = user.getUid();
 
-        mTimestamp.setText("Sent:" + message.getTimestamp());
+        if (message.getUserId().equals(uid)){
+            mPlaybackImage.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+            mLayout.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+
+
+        } else {
+            mPlaybackImage.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimaryLight));
+            mLayout.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimaryLight));
+
+        }
+
+        Date date = new Date(message.getTimestamp());
+        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        String formattedDate = df.format(date);
+
+
+        mTimestamp.setText("Sent: " + formattedDate);
     }
 
     private void fetchAudioUrlFromFirebase() {

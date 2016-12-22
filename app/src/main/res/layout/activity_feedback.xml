@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="Feedback"
+        android:textSize="20dp"
         android:textColor="@color/colorTextIcons"
         android:background="@color/colorPrimaryDark"
         android:textAlignment="center"
