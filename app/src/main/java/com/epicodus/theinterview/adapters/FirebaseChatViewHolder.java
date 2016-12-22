@@ -44,7 +44,12 @@ public class FirebaseChatViewHolder extends RecyclerView.ViewHolder implements V
         TextView mChatTitle = (TextView) mView.findViewById(R.id.chatTitle);
         ImageView mNewImage = (ImageView) mView.findViewById(R.id.newImageView);
 
-        mChatTitle.setText(chat.getHiringManagerChatId());
+        if (chat.isActive()){
+            mChatTitle.setText("Interview in progress");
+        } else {
+            mChatTitle.setText("Expired Interview");
+        }
+
 
         if(chat.isNewMessage() == false){
             mNewImage.setVisibility(View.GONE);

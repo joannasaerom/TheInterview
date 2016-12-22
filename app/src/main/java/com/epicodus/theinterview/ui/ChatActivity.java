@@ -106,7 +106,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         //show question prompt if user is hiring manager
         if (mChat != null){
-            if (mChat.getHiringManager().equals(uid)){
+            if (mChat.getHiringManager().equals(uid) && mChat.isActive()){
                 questionCounter = mChat.getQuestionNumber();
                 if (mChat.getQuestions().size() != 0){
                     interviewQuestions = mChat.getQuestions();
