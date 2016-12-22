@@ -42,7 +42,7 @@
             android:nextFocusDown="@+id/passwordEditText"
             android:padding="10dp"
             android:layout_marginBottom="10dp"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorPrimaryText"
             android:textColorHint="@color/colorSecondaryText"
             android:textSize="20sp" />
 
@@ -55,7 +55,7 @@
             android:inputType="textPassword"
             android:nextFocusDown="@+id/passwordEditText"
             android:padding="10dp"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorPrimaryText"
             android:textColorHint="@color/colorSecondaryText"
             android:textSize="20sp" />
 

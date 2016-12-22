@@ -2,6 +2,7 @@ package com.epicodus.theinterview.ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
     @Bind(R.id.passwordEditText) EditText mPasswordEditText;
     @Bind(R.id.confirmPasswordEditText) EditText mConfirmPasswordEditText;
     @Bind(R.id.loginTextView) TextView mLoginTextView;
+    @Bind(R.id.createAccountText) TextView mCreateAccountText;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -48,6 +50,10 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_create_user);
 
         ButterKnife.bind(this);
+
+        Typeface gravitas = Typeface.createFromAsset(getAssets(), "fonts/gravitas-one.regular.ttf");
+        mCreateUserButton.setTypeface(gravitas);
+        mCreateAccountText.setTypeface(gravitas);
 
         mAuth = FirebaseAuth.getInstance();
 

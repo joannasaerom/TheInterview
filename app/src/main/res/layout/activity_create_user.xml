@@ -4,16 +4,41 @@
     android:id="@+id/activity_create_user"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context="com.epicodus.theinterview.ui.CreateUserActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/appname_white"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:padding="30dp"
+        android:id="@+id/appLogo"
+        android:layout_above="@+id/createAccountText"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Account"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/colorTextIcons"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:id="@+id/createAccountText"
+        android:layout_above="@+id/linearLayout"
+        android:layout_centerHorizontal="true" />
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="30dp"
-        android:layout_centerVertical="true"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout">
+        android:id="@+id/linearLayout"
+        android:layout_above="@+id/loginTextView">
 
         <EditText
             android:id="@+id/nameEditText"
@@ -24,8 +49,8 @@
             android:nextFocusDown="@+id/passwordEditText"
             android:padding="10dp"
             android:layout_marginBottom="10dp"
-            android:textColor="@android:color/black"
-            android:textColorHint="@color/colorDivider"
+            android:textColor="@color/colorPrimaryText"
+            android:textColorHint="@color/colorSecondaryText"
             android:textSize="20sp" />
 
         <EditText
@@ -38,8 +63,8 @@
             android:nextFocusDown="@+id/passwordEditText"
             android:padding="10dp"
             android:layout_marginBottom="10dp"
-            android:textColor="@android:color/black"
-            android:textColorHint="@color/colorDivider"
+            android:textColor="@color/colorPrimaryText"
+            android:textColorHint="@color/colorSecondaryText"
             android:textSize="20sp" />
 
         <EditText
@@ -52,8 +77,8 @@
             android:nextFocusDown="@+id/passwordEditText"
             android:padding="10dp"
             android:layout_marginBottom="10dp"
-            android:textColor="@android:color/black"
-            android:textColorHint="@color/colorDivider"
+            android:textColor="@color/colorPrimaryText"
+            android:textColorHint="@color/colorSecondaryText"
             android:textSize="20sp" />
 
         <EditText
@@ -66,8 +91,8 @@
             android:nextFocusDown="@+id/passwordEditText"
             android:padding="10dp"
             android:layout_marginBottom="10dp"
-            android:textColor="@android:color/black"
-            android:textColorHint="@color/colorDivider"
+            android:textColor="@color/colorPrimaryText"
+            android:textColorHint="@color/colorPrimaryText"
             android:textSize="20sp" />
 
 
@@ -81,27 +106,19 @@
             android:layout_marginTop="15dp"
             android:textColor="@color/colorTextIcons" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/colorTextIcons"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            android:text="Already have an account? Log in here!"
-            android:id="@+id/loginTextView"
-            android:layout_gravity="center_horizontal" />
-
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create Account"
-        android:textColor="@color/colorPrimaryLight"
-        android:textSize="30dp"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/colorTextIcons"
         android:textStyle="bold"
-        android:layout_above="@+id/linearLayout"
-        android:layout_centerHorizontal="true" />
+        android:textSize="15sp"
+        android:layout_marginBottom="15dp"
+        android:text="Already have an account? Log in here!"
+        android:id="@+id/loginTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>
