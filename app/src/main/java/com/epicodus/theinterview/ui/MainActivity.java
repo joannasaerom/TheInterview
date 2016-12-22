@@ -60,17 +60,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .getReference(Constants.FIREBASE_CHAT_REFERENCE)
                 .child(uid);
 
-//        mChatReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
         setUpFirebaseAdapter();
 
         mStartButton.setOnClickListener(this);
@@ -158,8 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //save chat for hiring manager user
                     DatabaseReference pushRef = hmRef.push();
                     String pushId = pushRef.getKey();
-                    chat.setPushId(pushId);
-                    pushRef.setValue(chat);
+                    chat.setHiringManagerChatId(pushId);
 
                     //get database reference to save chat for interviewee user
                     DatabaseReference iRef = FirebaseDatabase
@@ -168,6 +156,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             .child(interviewee);
 
                     DatabaseReference tempRef = iRef.push();
+                    String tempId = tempRef.getKey();
+                    chat.setIntervieweeChatId(tempId);
+
+                    //save chat for each user
+                    pushRef.setValue(chat);
                     tempRef.setValue(chat);
 
                     Intent intent = new Intent(MainActivity.this, ChatActivity.class);

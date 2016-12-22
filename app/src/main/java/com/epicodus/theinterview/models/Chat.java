@@ -11,7 +11,8 @@ public class Chat {
     String hiringManager;
     String interviewee;
     boolean active;
-    String pushId;
+    String hiringManagerChatId;
+    String intervieweeChatId;
 
     public Chat(){}
 
@@ -30,20 +31,28 @@ public class Chat {
         return interviewee;
     }
 
-    public String getPushId() {
-        return pushId;
-    }
-
-    public void setPushId(String pushId) {
-        this.pushId = pushId;
-    }
-
     public boolean isActive() {
         return active;
     }
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getHiringManagerChatId() {
+        return hiringManagerChatId;
+    }
+
+    public void setHiringManagerChatId(String hiringManagerChatId) {
+        this.hiringManagerChatId = hiringManagerChatId;
+    }
+
+    public String getIntervieweeChatId() {
+        return intervieweeChatId;
+    }
+
+    public void setIntervieweeChatId(String intervieweeChatId) {
+        this.intervieweeChatId = intervieweeChatId;
     }
 }
 

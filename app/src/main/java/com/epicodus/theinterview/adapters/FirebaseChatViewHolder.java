@@ -42,7 +42,7 @@ public class FirebaseChatViewHolder extends RecyclerView.ViewHolder implements V
     public void bindChat(Chat chat){
         TextView mChatTitle = (TextView) mView.findViewById(R.id.chatTitle);
 
-        mChatTitle.setText(chat.getPushId());
+        mChatTitle.setText(chat.getHiringManagerChatId());
     }
 
     @Override
