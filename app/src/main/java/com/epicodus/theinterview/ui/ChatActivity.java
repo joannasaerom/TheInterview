@@ -86,8 +86,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mSendButton.setTypeface(gravitas);
         mFinishButton.setTypeface(gravitas);
 
-        //if chat active is false then change color of mic/sendbuttong?  when they try to click on mic give toast saying the interview has finished. same for button?
-
         //create local variables
         final ArrayList<Message> mMessages = new ArrayList<>();
 
@@ -95,6 +93,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         uid = user.getUid();
+
+        if (!mChat.isActive()) {
+            mFinishButton.setEnabled(false);
+            mSendButton.setEnabled(false);
+            mMicImage.setEnabled(false);
+            mActivityTitle.setText("Interview Over");
+            Toast.makeText(ChatActivity.this, "Interview is no long active", Toast.LENGTH_SHORT).show();
+        }
 
 
         //show question prompt if user is hiring manager
