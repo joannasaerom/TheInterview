@@ -2,6 +2,9 @@ package com.epicodus.theinterview.models;
 
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by joannaanderson on 12/19/16.
  */
@@ -11,6 +14,8 @@ public class Chat {
     String hiringManager;
     String interviewee;
     boolean active;
+    int questionNumber;
+    List<String> questions = new ArrayList<>();
     String hiringManagerChatId;
     String intervieweeChatId;
 
@@ -20,6 +25,7 @@ public class Chat {
         this.hiringManager = hiringManager;
         this.interviewee = interviewee;
         this.active = true;
+        this.questionNumber = 0;
 
     }
 
@@ -53,6 +59,22 @@ public class Chat {
 
     public void setIntervieweeChatId(String intervieweeChatId) {
         this.intervieweeChatId = intervieweeChatId;
+    }
+
+    public int getQuestionNumber() {
+        return questionNumber;
+    }
+
+    public void setQuestionNumber(int questionNumber) {
+        this.questionNumber = questionNumber;
+    }
+
+    public List<String> getQuestions() {
+        return questions;
+    }
+
+    public void addQuestion(String question) {
+        this.questions.add(question);
     }
 }
 

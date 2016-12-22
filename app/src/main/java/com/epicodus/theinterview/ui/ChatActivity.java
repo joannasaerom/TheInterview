@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -66,13 +67,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private String uid;
     private String randomFileName;
     private DatabaseReference mMessageReference;
+    private int questionCounter;
     private FirebaseRecyclerAdapter mFirebaseAdapter;
-    private String[] interviewQuestions = {};
-    private ArrayList<Message> mMessages = new ArrayList<>();
+    private List<String> interviewQuestions = new ArrayList<>();
 
     private String[] questions = {"Tell me about yourself.", "What do you like about current web development trends?", "How would you communicate with team members that are not developers?", "What are some of the challenges you faced while pairing?", "Give me an example of a recent challenge and how did you resolve it?", "What is a framework, and why use it?", "What is an object?", "What is string interpolation?"};
 
-    private int questionCounter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +89,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         //if chat active is false then change color of mic/sendbuttong?  when they try to click on mic give toast saying the interview has finished. same for button?
 
         //create local variables
-        questionCounter = 0;
         final ArrayList<Message> mMessages = new ArrayList<>();
 
         mChat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
@@ -96,13 +96,38 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         user = FirebaseAuth.getInstance().getCurrentUser();
         uid = user.getUid();
 
-        if (mChat.getHiringManager().equals(uid)){
-            mFinishButton.setText("Next Q");
-            mActivityTitle.setTextSize(15.0f);
-            mActivityTitle.setTypeface(Typeface.SANS_SERIF);
-            interviewQuestions = generateQuestions(questions);
-            mActivityTitle.setText(interviewQuestions[questionCounter]);
-            questionCounter += 1;
+
+        //show question prompt if user is hiring manager
+        if (mChat != null){
+            if (mChat.getHiringManager().equals(uid)){
+                questionCounter = mChat.getQuestionNumber();
+                if (mChat.getQuestions().size() != 0){
+                    interviewQuestions = mChat.getQuestions();
+                } else {
+                    interviewQuestions = generateQuestions(questions);
+                    for (int i = 0; i < interviewQuestions.size(); i++){
+                        mChat.addQuestion(interviewQuestions.get(i));
+                    }
+                }
+
+                if (questionCounter > 0 && questionCounter < 5){
+                    mActivityTitle.setTextSize(15.0f);
+                    mActivityTitle.setTypeface(Typeface.SANS_SERIF);
+                    mFinishButton.setText("Next Q");
+                    mActivityTitle.setText(interviewQuestions.get(questionCounter - 1));
+
+                } else if (questionCounter == 0){
+                    mFinishButton.setText("Next Q");
+                    mActivityTitle.setTextSize(15.0f);
+                    mActivityTitle.setTypeface(Typeface.SANS_SERIF);
+                    mActivityTitle.setText(interviewQuestions.get(questionCounter));
+                } else if (questionCounter == 5 && mChat.isActive() == true){
+                    mActivityTitle.setText(interviewQuestions.get(questionCounter - 1));
+                    mActivityTitle.setTextSize(15.0f);
+                    mActivityTitle.setTypeface(Typeface.SANS_SERIF);
+                }
+            }
+
         }
 
         mStorage = FirebaseStorage.getInstance().getReference();
@@ -155,6 +180,25 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public void onPause(){
+        super.onPause();
+
+        DatabaseReference updateChatRef = FirebaseDatabase
+                .getInstance()
+                .getReference(Constants.FIREBASE_CHAT_REFERENCE)
+                .child(mChat.getHiringManager())
+                .child(mChat.getHiringManagerChatId());
+        updateChatRef.setValue(mChat);
+
+        DatabaseReference updateSecChatRef = FirebaseDatabase
+                .getInstance()
+                .getReference(Constants.FIREBASE_CHAT_REFERENCE)
+                .child(mChat.getInterviewee())
+                .child(mChat.getIntervieweeChatId());
+        updateSecChatRef.setValue(mChat);
+    }
+
+    @Override
     public void onClick(View v) {
         if (v == mSendButton){
             if (randomFileName == null || randomFileName.equals("")){
@@ -168,12 +212,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             if (mChat.getHiringManager().equals(uid)){
                 //check what number question it is and display next question if not the last question
                 if (questionCounter == 4){
-                    mActivityTitle.setText(interviewQuestions[questionCounter]);
+                    mActivityTitle.setText(interviewQuestions.get(questionCounter));
                     mFinishButton.setText("Finish");
                     questionCounter += 1;
+                    mChat.setQuestionNumber(questionCounter);
                 } else if (questionCounter < 5){
-                    mActivityTitle.setText(interviewQuestions[questionCounter]);
+                    mActivityTitle.setText(interviewQuestions.get(questionCounter));
                     questionCounter += 1;
+                    mChat.setQuestionNumber(questionCounter);
                 } else {
                     setChatInactive();
 
@@ -275,12 +321,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mMessageList.setHasFixedSize(true);
         LinearLayoutManager lm = new LinearLayoutManager(this);
         mMessageList.setLayoutManager(lm);
-        lm.scrollToPosition(mMessages.size() - 1);
         mMessageList.setAdapter(mFirebaseAdapter);
 
     }
 
-    private String[] generateQuestions(String[] questions){
+    private List<String> generateQuestions(String[] questions){
         int index;
         String temp;
         Random random = new Random();
@@ -290,7 +335,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             questions[index] = questions[i];
             questions[i] = temp;
         }
-        String[] newQuestions = Arrays.copyOfRange(questions, 0, 5);
+        String[] shortenedList = Arrays.copyOfRange(questions, 0, 5);
+        List<String> newQuestions = new ArrayList<>();
+
+        for (int j = 0; j < shortenedList.length; j++){
+            newQuestions.add(shortenedList[j]);
+        }
         return newQuestions;
     }
 
