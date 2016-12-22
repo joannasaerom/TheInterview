@@ -10,7 +10,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:srcCompat="@drawable/theinterview"
+        app:srcCompat="@drawable/theinterview1"
         android:scaleType="centerCrop"
         android:id="@+id/imageView" />
 
@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:padding="55dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/appname_white"
+        android:src="@drawable/appname_white1"
         android:id="@+id/appName"
         android:layout_above="@id/linearLayout"
         android:layout_centerHorizontal="true"/>

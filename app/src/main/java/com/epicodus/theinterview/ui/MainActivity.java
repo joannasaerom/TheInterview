@@ -53,7 +53,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         createAuthProgressDialog();
 
-
+        Typeface gravitas = Typeface.createFromAsset(getAssets(), "fonts/gravitas-one.regular.ttf");
+        mActivityTitle.setTypeface(gravitas);
+        mStartButton.setTypeface(gravitas);
 
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
