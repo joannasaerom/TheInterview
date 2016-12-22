@@ -89,7 +89,7 @@ public class FirebaseMessageViewHolder extends RecyclerView.ViewHolder implement
         }
 
         Date date = new Date(message.getTimestamp());
-        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yy hh:mm aa");
         String formattedDate = df.format(date);
 
 

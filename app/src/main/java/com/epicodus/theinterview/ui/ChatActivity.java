@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.epicodus.theinterview.Constants;
 import com.epicodus.theinterview.R;
@@ -67,6 +68,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private DatabaseReference mMessageReference;
     private FirebaseRecyclerAdapter mFirebaseAdapter;
     private String[] interviewQuestions = {};
+    private ArrayList<Message> mMessages = new ArrayList<>();
 
     private String[] questions = {"Tell me about yourself.", "What do you like about current web development trends?", "How would you communicate with team members that are not developers?", "What are some of the challenges you faced while pairing?", "Give me an example of a recent challenge and how did you resolve it?", "What is a framework, and why use it?", "What is an object?", "What is string interpolation?"};
 
@@ -110,7 +112,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             public boolean onTouch(View view, MotionEvent motionEvent){
                 //check to see if user has pressed down on mic image
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-
+                    randomFileName = UUID.randomUUID().toString() + ".3gp";
                     startRecording();
                     mRecordText.setText("Recording");
                 //check if user lifts finger off of image
@@ -129,6 +131,20 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 .getReference(Constants.FIREBASE_MESSAGE_REFERENCE)
                 .child(mChat.getHiringManagerChatId());
 
+        mMessageReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    mMessages.add(snapshot.getValue(Message.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         setUpFirebaseAdapter();
 
         mDialog = new ProgressDialog(this);
@@ -141,6 +157,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v == mSendButton){
+            if (randomFileName == null || randomFileName.equals("")){
+                Toast.makeText(ChatActivity.this, "Audio is empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
             uploadAudio();
         }
         if (v == mFinishButton){
@@ -174,7 +194,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startRecording() {
         //generate random file name for saving audio
-        randomFileName = UUID.randomUUID().toString() + ".3gp";
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
         mFileName += "/" + randomFileName;
 
@@ -239,6 +258,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         message.setPushId(pushId);
         pushRef.setValue(message);
 
+        //set randomFileName to empty string
+        randomFileName = "";
+
     }
 
     private void setUpFirebaseAdapter(){
@@ -251,8 +273,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         //set recycler view settings
         mMessageList.setHasFixedSize(true);
-        mMessageList.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager lm = new LinearLayoutManager(this);
+        mMessageList.setLayoutManager(lm);
+        lm.scrollToPosition(mMessages.size() - 1);
         mMessageList.setAdapter(mFirebaseAdapter);
+
     }
 
     private String[] generateQuestions(String[] questions){
