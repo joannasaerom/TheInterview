@@ -1,6 +1,7 @@
 package com.epicodus.theinterview.ui;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +27,7 @@ public class NewFeedbackActivity extends AppCompatActivity implements View.OnCli
     @Bind(R.id.instructions) TextView mInstructions;
     @Bind(R.id.feedback) EditText mFeedback;
     @Bind(R.id.submitButton) Button mSubmitButton;
+    @Bind(R.id.activityTitle) TextView mActivityTitle;
 
     private Chat mChat;
 
@@ -37,6 +39,10 @@ public class NewFeedbackActivity extends AppCompatActivity implements View.OnCli
         ButterKnife.bind(this);
 
         mChat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
+
+        Typeface gravitas = Typeface.createFromAsset(getAssets(), "fonts/gravitas-one.regular.ttf");
+        mActivityTitle.setTypeface(gravitas);
+        mSubmitButton.setTypeface(gravitas);
 
         mSubmitButton.setOnClickListener(this);
     }

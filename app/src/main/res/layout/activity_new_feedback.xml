@@ -8,28 +8,61 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Now that the interview is over, please provide feedback for the user to improve their interview skills!"
-        android:textColor="@color/colorPrimaryText"
-        android:id="@+id/instructions"
+        android:layout_height="50dp"
+        android:text="Provide Feedback"
         android:textSize="20dp"
-        android:textAlignment="center"/>
+        android:textColor="@color/colorTextIcons"
+        android:background="@color/colorPrimaryDark"
+        android:textAlignment="center"
+        android:id="@+id/activityTitle"
+        android:gravity="center"
+        />
 
-    <EditText
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:layout_below="@+id/instructions"
-        android:id="@+id/feedback"
-        android:hint="Add feedback here"
-        android:textColor="@color/colorPrimaryText"
-        android:textColorHint="@color/colorPrimaryText"/>
+        android:layout_below="@+id/activityTitle"
+        android:paddingLeft="50dp"
+        android:layout_marginTop="80dp"
+        android:paddingRight="50dp"
+        android:id="@+id/linearLayout">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Please provide the user with helpful feedback to help them improve their interview skills!"
+            android:textColor="@color/colorAccent"
+            android:id="@+id/instructions"
+            android:textSize="20dp"
+            android:textAlignment="center"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/feedback"
+            android:hint="Add feedback here"
+            android:textColor="@color/colorPrimaryText"
+            android:textColorHint="@color/colorPrimaryText"/>
+
+    </LinearLayout>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit"
-        android:id="@+id/submitButton"
-        android:layout_alignParentBottom="true"/>
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorTextIcons"
+        android:id="@+id/submitButton"/>
 
 </RelativeLayout>
