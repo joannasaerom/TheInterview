@@ -6,7 +6,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,11 +16,11 @@ import com.epicodus.theinterview.R;
 import com.epicodus.theinterview.models.Message;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
 import java.io.IOException;
 
 import butterknife.Bind;
@@ -53,9 +52,16 @@ public class FirebaseMessageViewHolder extends RecyclerView.ViewHolder implement
                 mMediaPlayer = new MediaPlayer();
                 mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 fetchAudioUrlFromFirebase();
+                mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mPlaybackImage.setChecked(false);
+                    }
+                });
 
                 Toast.makeText(mContext, "Play", Toast.LENGTH_SHORT).show();
             } else{
+                mMediaPlayer.stop();
                 Toast.makeText(mContext, "Pause", Toast.LENGTH_SHORT).show();
             }
 
@@ -65,11 +71,14 @@ public class FirebaseMessageViewHolder extends RecyclerView.ViewHolder implement
     public void bindMessage(Message message){
         TextView mTimestamp = (TextView) mView.findViewById(R.id.timestamp);
         mMessage = message;
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();
+
         mTimestamp.setText("Sent:" + message.getTimestamp());
     }
 
     private void fetchAudioUrlFromFirebase() {
-        Log.d("FetchAudio", mMessage.getTextBody());
 
         StorageReference storage = FirebaseStorage
                 .getInstance()

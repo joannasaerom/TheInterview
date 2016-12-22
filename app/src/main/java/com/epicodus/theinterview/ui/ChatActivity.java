@@ -34,7 +34,10 @@ import org.parceler.Parcels;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 
 import butterknife.Bind;
@@ -57,6 +60,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private DatabaseReference mMessageReference;
     private FirebaseRecyclerAdapter mFirebaseAdapter;
 
+    private String[] questions = {"Tell me about yourself.", "What do you like about current web development trends?", "How would you communicate with team members that are not developers?", "What are some of the challenges you faced while pairing?", "Give me an example of a recent challenge and how did you resolve it?", "What is a framework, and why use it?", "What is an object?", "What is string interpolation?"};
+
+    private String[] interviewQuestions = {};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +71,15 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         ButterKnife.bind(this);
 
         mChat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();
+
+        if (mChat.getHiringManager().equals(uid)){
+            mFinishButton.setText("Next Q");
+            interviewQuestions = generateQuestions(questions);
+            mActivityTitle.setText(interviewQuestions[0]);
+        }
 
         mStorage = FirebaseStorage.getInstance().getReference();
 
@@ -99,7 +115,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mSendButton.setOnClickListener(this);
         mFinishButton.setOnClickListener(this);
 
-        //if chat active is false then change color of imagebackground?  when they try to click on mic give toast saying the interview has finished. same for button?
+        //if chat active is false then change color of mic/sendbuttong?  when they try to click on mic give toast saying the interview has finished. same for button?
     }
 
     @Override
@@ -109,7 +125,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }
         if (v == mFinishButton){
             //set chat activity to false. if hiring manager get feedback prompt and save feedback. for both users return to main activity.
-
         }
 
     }
@@ -119,6 +134,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
         mFileName += "/" + randomFileName;
+
+        if (mRecorder != null){
+            mRecorder.reset();
+            mRecorder.release();
+            mRecorder = null;
+        }
 
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -189,5 +210,19 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mMessageList.setHasFixedSize(true);
         mMessageList.setLayoutManager(new LinearLayoutManager(this));
         mMessageList.setAdapter(mFirebaseAdapter);
+    }
+
+    private String[] generateQuestions(String[] questions){
+        int index;
+        String temp;
+        Random random = new Random();
+        for (int i = questions.length - 1; i > 0; i--){
+            index = random.nextInt(i+1);
+            temp = questions[index];
+            questions[index] = questions[i];
+            questions[i] = temp;
+        }
+        String[] newQuestions = Arrays.copyOfRange(questions, 0, 5);
+        return newQuestions;
     }
 }
