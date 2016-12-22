@@ -133,37 +133,29 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             //check if user is the hiring manager
             if (mChat.getHiringManager().equals(uid)){
                 //check what number question it is and display next question if not the last question
-                if (questionCounter < 5){
+                if (questionCounter == 4){
+                    mActivityTitle.setText(interviewQuestions[questionCounter]);
+                    mFinishButton.setText("Finish");
+                    questionCounter += 1;
+                } else if (questionCounter < 5){
                     mActivityTitle.setText(interviewQuestions[questionCounter]);
                     questionCounter += 1;
                 } else {
-                    //generate
+                    setChatInactive();
+
+                    Intent intent = new Intent(ChatActivity.this, NewFeedbackActivity.class);
+                    intent.putExtra("chat", Parcels.wrap(mChat));
+                    startActivity(intent);
                 }
             }
-            mChat.setActive(false);
-            //set chat activity to false. if hiring manager get feedback prompt and save feedback. for both users return to main activity.
-            DatabaseReference updateChatRef = FirebaseDatabase
-                    .getInstance()
-                    .getReference(Constants.FIREBASE_CHAT_REFERENCE)
-                    .child(mChat.getHiringManager())
-                    .child(mChat.getHiringManagerChatId());
+            if (mChat.getInterviewee().equals(uid)){
+                setChatInactive();
 
-            updateChatRef.setValue(mChat);
-
-            DatabaseReference updateSecChatRef = FirebaseDatabase
-                    .getInstance()
-                    .getReference(Constants.FIREBASE_CHAT_REFERENCE)
-                    .child(mChat.getInterviewee())
-                    .child(mChat.getIntervieweeChatId());
-
-            updateSecChatRef.setValue(mChat);
-
-            //send users back to main activity
-            Intent intent = new Intent(ChatActivity.this, MainActivity.class);
-            startActivity(intent);
-
+                //send users back to main activity
+                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
         }
-
     }
 
     private void startRecording() {
@@ -261,5 +253,24 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }
         String[] newQuestions = Arrays.copyOfRange(questions, 0, 5);
         return newQuestions;
+    }
+
+    private void setChatInactive(){
+        mChat.setActive(false);
+        //create database reference for hr user to update their chat data
+        DatabaseReference updateChatRef = FirebaseDatabase
+                .getInstance()
+                .getReference(Constants.FIREBASE_CHAT_REFERENCE)
+                .child(mChat.getHiringManager())
+                .child(mChat.getHiringManagerChatId());
+        updateChatRef.setValue(mChat);
+
+        //create database reference for interviewee to update their chat data
+        DatabaseReference updateSecChatRef = FirebaseDatabase
+                .getInstance()
+                .getReference(Constants.FIREBASE_CHAT_REFERENCE)
+                .child(mChat.getInterviewee())
+                .child(mChat.getIntervieweeChatId());
+        updateSecChatRef.setValue(mChat);
     }
 }
