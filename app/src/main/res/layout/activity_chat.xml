@@ -8,7 +8,7 @@
 
     <TextView
         android:layout_width="300dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:text="Interview"
         android:textSize="20dp"
         android:textColor="@color/colorTextIcons"
@@ -29,34 +29,34 @@
         android:layout_alignParentTop="true"
         android:layout_alignBottom="@+id/activityTitle" />
 
-    <android.support.v7.widget.RecyclerView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/messageList"
-        android:layout_below="@+id/activityTitle"
-        android:layout_above="@+id/micImage">
-    </android.support.v7.widget.RecyclerView>
-
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/messageSendLayout">
 
         <ImageView
             android:layout_height="wrap_content"
-            android:layout_width="300dp"
+            android:layout_width="200dp"
             android:paddingTop="5dp"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/colorAccent"
             android:layout_above="@+id/recordText"
             android:id="@+id/micImage"
             android:src="@drawable/ic_mic_white_24dp"
           />
 
         <TextView
-            android:layout_width="300dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:text="Press mic to record"
             android:textSize="12dp"
             android:textAlignment="center"
             android:paddingBottom="5dp"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/colorAccent"
             android:id="@+id/recordText"
             android:textColor="@color/colorTextIcons"/>
 
@@ -64,7 +64,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorAccent"
         android:text="Send"
         android:textColor="@color/colorTextIcons"
         android:id="@+id/sendButton"
@@ -72,6 +72,15 @@
         android:layout_alignParentBottom="true"
         android:layout_alignTop="@+id/micImage" />
 
+    </RelativeLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/messageSendLayout"
+        android:id="@+id/messageList"
+        android:layout_below="@+id/activityTitle"
+        android:layout_alignParentStart="true">
+    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>
