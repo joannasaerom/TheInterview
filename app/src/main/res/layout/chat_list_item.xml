@@ -14,6 +14,15 @@
         android:textColor="@color/colorAccent"
         android:id="@+id/chatTitle"/>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newImageView"
+        android:src="@drawable/ic_fiber_new_black_24dp"
+        android:layout_alignTop="@+id/chatTitle"
+        android:layout_marginRight="30dp"
+        android:layout_alignParentRight="true"/>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -22,5 +31,7 @@
         android:layout_marginRight="15dp"
         android:background="@color/colorDivider"
         />
+
+
 
 </RelativeLayout>

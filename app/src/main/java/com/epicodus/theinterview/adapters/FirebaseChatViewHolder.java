@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.epicodus.theinterview.Constants;
@@ -41,8 +42,13 @@ public class FirebaseChatViewHolder extends RecyclerView.ViewHolder implements V
 
     public void bindChat(Chat chat){
         TextView mChatTitle = (TextView) mView.findViewById(R.id.chatTitle);
+        ImageView mNewImage = (ImageView) mView.findViewById(R.id.newImageView);
 
         mChatTitle.setText(chat.getHiringManagerChatId());
+
+        if(chat.isNewMessage() == false){
+            mNewImage.setVisibility(View.GONE);
+        }
     }
 
     @Override

@@ -90,6 +90,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         final ArrayList<Message> mMessages = new ArrayList<>();
 
         mChat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
+        mChat.setNewMessage(false);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         uid = user.getUid();
@@ -189,19 +190,23 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     public void onPause(){
         super.onPause();
 
-        DatabaseReference updateChatRef = FirebaseDatabase
-                .getInstance()
-                .getReference(Constants.FIREBASE_CHAT_REFERENCE)
-                .child(mChat.getHiringManager())
-                .child(mChat.getHiringManagerChatId());
-        updateChatRef.setValue(mChat);
-
-        DatabaseReference updateSecChatRef = FirebaseDatabase
-                .getInstance()
-                .getReference(Constants.FIREBASE_CHAT_REFERENCE)
-                .child(mChat.getInterviewee())
-                .child(mChat.getIntervieweeChatId());
-        updateSecChatRef.setValue(mChat);
+        if (uid.equals(mChat.getHiringManager())){
+            mChat.setNewMessage(false);
+            DatabaseReference updateChatRef = FirebaseDatabase
+                    .getInstance()
+                    .getReference(Constants.FIREBASE_CHAT_REFERENCE)
+                    .child(mChat.getHiringManager())
+                    .child(mChat.getHiringManagerChatId());
+            updateChatRef.setValue(mChat);
+        } else if (uid.equals(mChat.getInterviewee())){
+            mChat.setNewMessage(false);
+            DatabaseReference updateSecChatRef = FirebaseDatabase
+                    .getInstance()
+                    .getReference(Constants.FIREBASE_CHAT_REFERENCE)
+                    .child(mChat.getInterviewee())
+                    .child(mChat.getIntervieweeChatId());
+            updateSecChatRef.setValue(mChat);
+        }
     }
 
     @Override
@@ -309,6 +314,26 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         String pushId = pushRef.getKey();
         message.setPushId(pushId);
         pushRef.setValue(message);
+
+        //update other user's chat to let them know there is new message
+        if (uid.equals(mChat.getInterviewee())){
+            mChat.setNewMessage(true);
+            DatabaseReference updateChatRef = FirebaseDatabase
+                    .getInstance()
+                    .getReference(Constants.FIREBASE_CHAT_REFERENCE)
+                    .child(mChat.getHiringManager())
+                    .child(mChat.getHiringManagerChatId());
+            updateChatRef.setValue(mChat);
+        } else if (uid.equals(mChat.getHiringManager())){
+            mChat.setNewMessage(true);
+            DatabaseReference updateSecChatRef = FirebaseDatabase
+                    .getInstance()
+                    .getReference(Constants.FIREBASE_CHAT_REFERENCE)
+                    .child(mChat.getInterviewee())
+                    .child(mChat.getIntervieweeChatId());
+            updateSecChatRef.setValue(mChat);
+        }
+
 
         //set randomFileName to empty string
         randomFileName = "";

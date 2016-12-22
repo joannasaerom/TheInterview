@@ -17,6 +17,7 @@ public class Chat {
     int questionNumber;
     List<String> questions = new ArrayList<>();
     String hiringManagerChatId;
+    boolean newMessage;
     String intervieweeChatId;
 
     public Chat(){}
@@ -26,7 +27,7 @@ public class Chat {
         this.interviewee = interviewee;
         this.active = true;
         this.questionNumber = 0;
-
+        this.newMessage = false;
     }
 
     public String getHiringManager() {
@@ -75,6 +76,14 @@ public class Chat {
 
     public void addQuestion(String question) {
         this.questions.add(question);
+    }
+
+    public boolean isNewMessage() {
+        return newMessage;
+    }
+
+    public void setNewMessage(boolean newMessage) {
+        this.newMessage = newMessage;
     }
 }
 
